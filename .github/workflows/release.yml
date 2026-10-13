@@ -6,17 +6,24 @@ name: Release
 on:
   push:
     tags:
-      - "v[0-9][0-9][0-9][0-9].[0-9][0-9].[0-9][0-9]"
+      # 格式由 set-version.mjs 严格校验，这里放宽，避免 glob 写法不被识别而静默不触发
+      - "v*"
+  # 推送标签没触发、或要重新构建某个版本时，在 Actions 页面手动运行并填标签
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 要构建的标签，例如 v2026.10.13
+        required: true
 
 permissions:
   contents: write
 
 concurrency:
-  group: release-${{ github.ref_name }}
+  group: release-${{ inputs.tag || github.ref_name }}
   cancel-in-progress: false
 
 env:
-  TAG: ${{ github.ref_name }}
+  TAG: ${{ inputs.tag || github.ref_name }}
   GH_TOKEN: ${{ github.token }}
   CARGO_TERM_COLOR: always
 
@@ -28,6 +35,8 @@ jobs:
       version: ${{ steps.version.outputs.version }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.TAG }}
 
       - name: 校验标签并计算版本号
         id: version
@@ -74,6 +83,8 @@ jobs:
       NO_STRIP: "true"
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.TAG }}
 
       - name: 安装 Linux 构建依赖
         if: matrix.platform == 'linux'
@@ -133,6 +144,8 @@ jobs:
       VERSION: ${{ needs.draft.outputs.version }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.TAG }}
 
       - uses: actions/setup-node@v4
         with:
@@ -204,6 +217,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.TAG }}
 
       - name: 生成校验和
         run: |

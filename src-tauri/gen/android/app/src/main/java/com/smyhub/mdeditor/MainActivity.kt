@@ -1,4 +1,4 @@
-package com.mdeditor.app
+package com.smyhub.mdeditor
 
 import android.content.Intent
 import android.os.Bundle

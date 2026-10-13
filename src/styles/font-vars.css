@@ -1,7 +1,8 @@
-:root,
-[data-theme="dark"],
-[data-theme="light"] {
-  --font-ui: "Source Han Serif SC", "Noto Serif CJK SC", "STSong", "SimSun", serif;
+/* 只定义在 :root 上，靠继承下发。不能再挂 [data-theme] 选择器：预览容器自身带
+   data-theme 属性，会在那一层重新定义默认值，挡住字体设置写在 <html> 上的覆盖 */
+:root {
+  /* Maple 在前：它不含汉字，浏览器会逐字回退，于是西文走 Maple、中文走文楷 */
+  --font-ui: "Maple Mono", "LXGW WenKai Mono", "KaiTi", "STKaiti", monospace;
   --font-code: var(--font-ui);
   --fontStack-sansSerif: var(--font-ui);
   --fontStack-monospace: var(--font-ui);

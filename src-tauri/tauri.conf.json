@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "MD Editor",
+  "productName": "MDEditor",
   "version": "0.1.0",
-  "identifier": "com.mdeditor.app",
+  "identifier": "com.smyhub.mdeditor",
   "build": {
     "beforeDevCommand": "npm run dev",
     "devUrl": "http://localhost:1420",
@@ -12,7 +12,7 @@
   "app": {
     "windows": [
       {
-        "title": "MD Editor",
+        "title": "MDEditor",
         "width": 1280,
         "height": 800,
         "minWidth": 600,
@@ -23,7 +23,13 @@
       }
     ],
     "security": {
-      "csp": null
+      "csp": null,
+      "assetProtocol": {
+        "enable": true,
+        "scope": [
+          "**"
+        ]
+      }
     }
   },
   "bundle": {
@@ -38,12 +44,16 @@
     ],
     "fileAssociations": [
       {
-        "ext": ["md", "markdown"],
+        "ext": [
+          "md",
+          "markdown"
+        ],
         "name": "Markdown File",
         "description": "Markdown document",
         "role": "Editor"
       }
     ],
-    "windows": {}
+    "windows": {},
+    "resources": {}
   }
 }

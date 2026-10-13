@@ -1,0 +1,114 @@
+/* 挂在 body 上(portal)，不在 .app 里，字体和拖拽区域都要自己声明 */
+.font-dialog-mask {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.35);
+  font-family: var(--font-ui);
+  -webkit-app-region: no-drag;
+}
+
+.font-dialog {
+  width: min(520px, calc(100vw - 32px));
+  background: var(--bg-dropdown);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  box-shadow: var(--dropdown-shadow);
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  animation: dropdownFadeIn 0.12s ease;
+}
+
+.font-dialog-title {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.font-field {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+}
+
+.font-field > span {
+  width: 64px;
+  flex-shrink: 0;
+  color: var(--text-secondary);
+}
+
+.font-field select {
+  flex: 1;
+  min-width: 0;
+  height: 30px;
+  padding: 0 8px;
+  border-radius: 5px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 13px;
+  outline: none;
+}
+
+.font-field select:focus {
+  border-color: var(--accent);
+}
+
+.font-hint {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.font-preview {
+  padding: 12px;
+  border-radius: 6px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  font-size: 15px;
+  line-height: 1.8;
+  user-select: text;
+  word-break: break-all;
+}
+
+.font-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.font-btn {
+  padding: 6px 12px;
+  border-radius: 5px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.font-btn:hover:not(:disabled) {
+  background: var(--dropdown-item-hover);
+  color: var(--text-primary);
+}
+
+.font-btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.font-btn.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.font-btn.primary:hover {
+  background: var(--accent-hover);
+  color: #fff;
+}

@@ -1,7 +1,19 @@
+/* 中文：霞鹜文楷 Mono（GB2312 子集，6763 个常用字），生僻字由 font-vars 里的系统楷体兜底 */
 @font-face {
-  font-family: "Source Han Serif SC";
-  src: url("/fonts/SourceHanSerifSC-VF.woff2") format("woff2");
-  font-weight: 200 900;
+  font-family: "LXGW WenKai Mono";
+  src: url("/fonts/LXGWWenKaiMono-Regular.woff2") format("woff2");
+  font-weight: 400;
   font-style: normal;
   font-display: swap;
+}
+
+/* 非中文：Maple Mono。unicode-range 刻意挖掉 U+2018–201D（‘’“”）：
+   Maple 也带这几个引号，但会画成半角窄引号，中文语境下应交给文楷画全角样式 */
+@font-face {
+  font-family: "Maple Mono";
+  src: url("/fonts/MapleMono-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-2017, U+201E-2E7F, U+E000-F8FF, U+FB00-FEFF;
 }

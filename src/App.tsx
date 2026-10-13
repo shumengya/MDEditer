@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, lazy, Suspense } from "react";
+import { useState, useEffect, useMemo, useRef, useCallback, lazy, Suspense } from "react";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { invoke } from "@tauri-apps/api/core";
 import { ask } from "@tauri-apps/plugin-dialog";
@@ -14,8 +14,21 @@ const isMobile = () => window.innerWidth <= 768;
 
 export default function App() {
   const [viewMode, setViewMode] = useState<ViewMode>(isMobile() ? "preview" : "split");
-  const [_scrollRatio] = useState<number | null>(null);
   const { fileState, setContent, newFile, openFile, saveFile, saveFileAs } = useFile();
+
+  const editorScrollControlRef = useRef<((line: number) => void) | null>(null);
+  const previewScrollControlRef = useRef<((line: number) => void) | null>(null);
+
+  // 回声由两侧各自判断(它们能直接比对滚动像素)，这里只负责把「行号」这个
+  // 共同坐标从一侧传到另一侧。用行号而非滚动百分比，是因为同一段文字在
+  // 源码和渲染结果里的高度完全不成比例，按百分比对齐会越滚越偏。
+  const handleEditorScroll = useCallback((line: number) => {
+    previewScrollControlRef.current?.(line);
+  }, []);
+
+  const handlePreviewScroll = useCallback((line: number) => {
+    editorScrollControlRef.current?.(line);
+  }, []);
 
   // Receive file path at startup: Android intent (JavascriptInterface) or desktop CLI arg.
   // Falls back to last opened file when no explicit path is provided.
@@ -29,7 +42,7 @@ export default function App() {
     }
 
     const restoreLastFile = () => {
-      const last = localStorage.getItem("md-editor-last-file");
+      const last = localStorage.getItem("mdeditor-last-file") ?? localStorage.getItem("md-editor-last-file");
       if (last) openFile(last);
     };
 
@@ -108,7 +121,7 @@ export default function App() {
         {(viewMode === "edit" || viewMode === "split") && (
           <div className={`pane editor-pane ${viewMode === "split" ? "split" : "full"}`}>
             <Suspense fallback={<div className="pane-loading" />}>
-              <Editor content={fileState.content} onChange={setContent} />
+              <Editor content={fileState.content} onChange={setContent} onScroll={handleEditorScroll} scrollControlRef={editorScrollControlRef} />
             </Suspense>
           </div>
         )}
@@ -118,7 +131,7 @@ export default function App() {
         {(viewMode === "preview" || viewMode === "split") && (
           <div className={`pane preview-pane ${viewMode === "split" ? "split" : "full"}`}>
             <Suspense fallback={<div className="pane-loading" />}>
-              <Preview content={fileState.content} syncScrollFrom={_scrollRatio} />
+              <Preview content={fileState.content} filePath={fileState.path} onScroll={handlePreviewScroll} scrollControlRef={previewScrollControlRef} />
             </Suspense>
           </div>
         )}

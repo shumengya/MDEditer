@@ -1,9 +1,15 @@
 {
   "$schema": "../gen/schemas/desktop-schema.json",
   "identifier": "default",
-  "description": "Desktop capabilities for MD Editor",
-  "windows": ["main"],
-  "platforms": ["windows", "linux", "macOS"],
+  "description": "Desktop capabilities for MDEditor",
+  "windows": [
+    "main"
+  ],
+  "platforms": [
+    "windows",
+    "linux",
+    "macOS"
+  ],
   "permissions": [
     "core:default",
     "dialog:default",
@@ -13,14 +19,14 @@
     "fs:allow-read-text-file",
     "fs:allow-write-text-file",
     "fs:allow-exists",
-    "fs:allow-watch",
     "fs:scope-home-recursive",
-    "shell:default",
     "dialog:allow-ask",
     "core:window:allow-close",
+    "core:window:allow-set-title",
     "core:window:allow-destroy",
     "core:window:allow-minimize",
     "core:window:allow-toggle-maximize",
-    "core:window:allow-start-dragging"
+    "core:window:allow-start-dragging",
+    "opener:default"
   ]
 }

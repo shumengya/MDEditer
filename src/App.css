@@ -48,3 +48,18 @@
   width: 100%;
   height: 100%;
 }
+
+/* 预览按顶层块渲染，每块带 data-line 供滚动同步定位。
+   块间距交由 github-markdown-css 的 margin 控制，这里只去掉外层多余的包裹感 */
+.preview-content .md-block {
+  display: block;
+}
+
+/* 正文外的全局 user-select:none 意在禁止 UI 被误选中，
+   但编辑器内部必须能选中/复制文本，这里显式恢复 */
+.editor-pane,
+.editor-pane .cm-editor,
+.editor-pane .cm-content {
+  user-select: text;
+  -webkit-user-select: text;
+}

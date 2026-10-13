@@ -42,3 +42,8 @@ desktop.ini
 .env
 .env.*
 !.env.example
+
+# 安卓正式签名密钥：只存在于本机备份和 GitHub Secrets，绝不入库
+keystore.properties
+*.jks
+*.keystore

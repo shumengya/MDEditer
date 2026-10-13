@@ -1,28 +1,38 @@
 [package]
-name = "md-editer"
+name = "mdeditor"
 version = "0.1.0"
 description = "A Markdown editor with GitHub-style preview"
 authors = ["shumengya"]
 edition = "2021"
 
 [lib]
-name = "md_editer_lib"
+name = "mdeditor_lib"
 crate-type = ["staticlib", "cdylib", "rlib"]
 
 [[bin]]
-name = "md-editer"
+name = "mdeditor"
 path = "src/main.rs"
 
 [build-dependencies]
 tauri-build = { version = "2", features = [] }
 
 [dependencies]
-tauri = { version = "2", features = ["tray-icon"] }
+tauri = { version = "2", features = ["protocol-asset"] }
 tauri-plugin-dialog = "2"
 tauri-plugin-fs = "2"
-tauri-plugin-shell = "2"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
+tauri-plugin-opener = "2"
+
+# 文件热加载；移动端打开的是 content:// 虚拟路径，用不上
+[target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
+notify = "8"
+
+# 最小化时调低 WebView2 内存目标、枚举系统字体；版本须与 tauri 内部使用的保持一致
+[target.'cfg(windows)'.dependencies]
+webview2-com = "0.38"
+windows-core = "0.61"
+windows = { version = "0.61", features = ["Win32_Graphics_DirectWrite", "Win32_UI_Shell"] }
 
 [profile.release]
 panic = "abort"

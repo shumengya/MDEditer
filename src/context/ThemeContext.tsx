@@ -14,12 +14,12 @@ const ThemeContext = createContext<ThemeContextValue>({
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState<Theme>(() => {
-    return (localStorage.getItem("md-editor-theme") as Theme) ?? "dark";
+    return (localStorage.getItem("mdeditor-theme") as Theme) ?? "dark";
   });
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
-    localStorage.setItem("md-editor-theme", theme);
+    localStorage.setItem("mdeditor-theme", theme);
   }, [theme]);
 
   const toggleTheme = () => setTheme((t) => (t === "dark" ? "light" : "dark"));

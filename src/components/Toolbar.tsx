@@ -1,7 +1,9 @@
 import { useRef, useState, useEffect } from "react";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { invoke } from "@tauri-apps/api/core";
+import { getVersion } from "@tauri-apps/api/app";
 import { useTheme } from "../context/ThemeContext";
+import FontSettings from "./FontSettings";
 import "./Toolbar.css";
 
 export type ViewMode = "edit" | "split" | "preview";
@@ -29,6 +31,13 @@ export default function Toolbar({
 }: ToolbarProps) {
   const { theme, toggleTheme } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [fontDialogOpen, setFontDialogOpen] = useState(false);
+  // 版本号由发布流程按日期写入 tauri.conf.json，这里运行时读取，不再写死
+  const [version, setVersion] = useState("");
+
+  useEffect(() => {
+    getVersion().then(setVersion).catch(() => {});
+  }, []);
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -61,7 +70,7 @@ export default function Toolbar({
       {/* 左区 — 无 data-tauri-drag-region，依靠 CSS no-drag 覆盖 */}
       <div className="toolbar-left">
         <div className="app-logo">
-          <img src="/logo.svg" alt="MD Editor" width={18} height={18} />
+          <img src="/logo.svg" alt="MDEditor" width={18} height={18} />
         </div>
         <div className="toolbar-group">
           <button type="button" className="tb-btn tb-btn-new" onClick={onNew} title="新建 (Ctrl+N)">
@@ -166,6 +175,14 @@ export default function Toolbar({
                 )}
               </button>
               <div className="dropdown-separator" />
+              <button className="dropdown-item" onClick={() => handleMenuAction(() => setFontDialogOpen(true))}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <polyline points="4,7 4,4 20,4 20,7" />
+                  <line x1="9" y1="20" x2="15" y2="20" /><line x1="12" y1="4" x2="12" y2="20" />
+                </svg>
+                字体设置
+              </button>
+              <div className="dropdown-separator" />
               <button className="dropdown-item" onClick={() => handleMenuAction(onNew)}>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
@@ -213,10 +230,10 @@ export default function Toolbar({
                   <polyline points="14,2 14,8 20,8" />
                   <line x1="12" y1="18" x2="12" y2="12" /><line x1="9" y1="15" x2="15" y2="15" />
                 </svg>
-                注册右键菜单
+                设为默认打开方式
               </button>
               <div className="dropdown-separator" />
-              <div className="dropdown-version">MD 编辑器 v0.1.0</div>
+              <div className="dropdown-version">MDEditor{version && ` v${version}`}</div>
             </div>
           )}
         </div>
@@ -245,6 +262,7 @@ export default function Toolbar({
           />
         </div>
       </div>
+      {fontDialogOpen && <FontSettings onClose={() => setFontDialogOpen(false)} />}
     </div>
   );
 }

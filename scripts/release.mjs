@@ -40,8 +40,9 @@ if (dirty.length > 0) {
 }
 
 execFileSync("node", ["scripts/set-version.mjs", tag], { stdio: "inherit" });
-// Cargo.lock 里记录着本包版本，同步刷新，不联网
-execFileSync("cargo", ["metadata", "--format-version", "1", "--offline", "--manifest-path", "src-tauri/Cargo.toml"], {
+// Cargo.lock 里记录着本包版本，同步刷新。不能用 cargo metadata：它要下载所有平台的依赖源码，
+// 本机没编过 Linux 版时离线必失败；cargo update -p 只改本包这一行
+execFileSync("cargo", ["update", "-p", "mdeditor", "--offline", "--manifest-path", "src-tauri/Cargo.toml"], {
   stdio: ["ignore", "ignore", "inherit"],
 });
 

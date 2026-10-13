@@ -2021,7 +2021,7 @@ dependencies = [
 
 [[package]]
 name = "mdeditor"
-version = "0.1.0"
+version = "2026.10.13"
 dependencies = [
  "notify",
  "serde",

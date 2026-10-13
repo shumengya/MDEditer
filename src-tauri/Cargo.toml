@@ -1,6 +1,6 @@
 [package]
 name = "mdeditor"
-version = "0.1.0"
+version = "2026.10.13"
 description = "A Markdown editor with GitHub-style preview"
 authors = ["shumengya"]
 edition = "2021"

@@ -22,6 +22,11 @@ concurrency:
   group: release-${{ inputs.tag || github.ref_name }}
   cancel-in-progress: false
 
+# Windows runner 默认用 PowerShell，"$TAG" 会被当成 PowerShell 变量读成空，统一用 bash
+defaults:
+  run:
+    shell: bash
+
 env:
   TAG: ${{ inputs.tag || github.ref_name }}
   GH_TOKEN: ${{ github.token }}
